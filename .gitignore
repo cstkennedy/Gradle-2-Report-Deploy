@@ -1,0 +1,24 @@
+# General Ignore Rules
+**.o
+**.exe
+**.zip
+**.class
+**.jar
+!**gradle/wrapper/gradle-wrapper.jar
+!gradle-wrapper.jar
+**.pyc
+
+**/build/
+**/.gradle/
+
+# Eclipse Project Ignore Rules
+**.project
+**.settings
+**.classpath
+
+# Scratch (temp) File & Directory Ignore rules
+Scratch
+**.bak
+
+# Vim rules
+**.swp
