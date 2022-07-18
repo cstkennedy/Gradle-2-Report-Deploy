@@ -175,7 +175,8 @@ task doAllTheCopying(dependsOn: [
 
 task buildHomePage(dependsOn: copyJBakeTemplates)
 {
-    inputs.files ("build/tmp/website/content/home0.md", "../README.md")
+    // Note that "../README.md" is not "./README.md"
+    inputs.files ("build/tmp/website/content/home0.md", "./README.md")
     outputs.file ("build/tmp/website/content/home.md")
 
     doLast  {
