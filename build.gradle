@@ -205,7 +205,32 @@ bake {
 //------------------------------------------------------------------------------
 // Deploy/Update Project Website on GitHub Pages
 //------------------------------------------------------------------------------
-task copyJBakePagesForUse(dependsOn: ["bake"])
+def websiteRepo = "git@github.com:cstkennedy/Gradle-2-Report-Website.git"
+
+task clearPages(type: Delete)
+{
+    delete "build/gh-pages"
+}
+
+task clonePagesRepo(dependsOn: ["clearPages"])
+{
+    doLast {
+        exec {
+            workingDir = "."
+            commandLine = ["git", "clone", websiteRepo, "build/gh-pages"]
+        }
+        exec {
+            workingDir = "build/gh-pages"
+            commandLine = ["git", "config", "user.email", "\"tkennedy@cs.odu.edu\""]
+        }
+        exec {
+            workingDir = "build/gh-pages"
+            commandLine = ["git", "config", "user.name", "\"Thomas J. Kennedy\""]
+        }
+    }
+}
+
+task copyJBakePagesForUse(dependsOn: ["bake", "clonePagesRepo"])
 {
     group "GitHub Pages"
 

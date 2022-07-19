@@ -10,3 +10,8 @@ based on
   - The project site is available at <https://cstkennedy.github.io/Gradle-2-Report-Website/>.
 
   - The *Home Page* is available at <https://cstkennedy.github.io/Gradle-2-Report-Website/home.html>.
+
+
+# Status
+
+Gradle now handles the entire website update process.
