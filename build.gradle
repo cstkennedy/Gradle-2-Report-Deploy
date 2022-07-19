@@ -201,3 +201,39 @@ task setUpWebsite()
 bake {
     dependsOn "setUpWebsite"
 }
+
+//------------------------------------------------------------------------------
+// Deploy/Update Project Website on GitHub Pages
+//------------------------------------------------------------------------------
+task copyJBakePagesForUse(dependsOn: ["bake"])
+{
+    group "GitHub Pages"
+
+    doLast {
+        ant.copy (todir: "build/gh-pages") {
+            fileset(dir: "build/jbake")
+        }
+    }
+}
+
+task updateGitHubPages(dependsOn: ["copyJBakePagesForUse"])
+{
+    group "GitHub Pages"
+    description "Copy everything into \"gh-pages\" directory and push to Report Website."
+
+    doLast {
+        def pagesDir = "$buildDir/gh-pages"
+        exec {
+            workingDir = "$buildDir/gh-pages"
+            commandLine = ["git", "add", "."]
+        }
+        exec {
+            workingDir = "$buildDir/gh-pages"
+            commandLine = ["git", "commit", "-m", "Update report site"]
+        }
+        exec {
+            workingDir = "$buildDir/gh-pages"
+            commandLine = ["git", "push"]
+        }
+    }
+}
