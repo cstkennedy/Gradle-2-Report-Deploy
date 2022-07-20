@@ -7,55 +7,66 @@ import java.util.List;
  */
 public class RunPrimeGenerator {
     /**
+     * Default number of primes to generate.
+     */
+    public static final int DEFAULT_NUMBER_OF_PRIMES = 10;
+
+    /**
+     * Parse the command line arguments and determine how many prime numbers to
+     * generate. If the user supplied no arguments or supplied a non-integer
+     * value, use program default.
+     *
+     * @param args raw array of command line arguments
+     *
+     * @return number of primes to generated
+     */
+    public static int parseCLI(String[] args)
+    {
+        int numPrimes = 0;
+
+        try {
+            numPrimes = Integer.parseInt(args[0]);
+        }
+        catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+            numPrimes = DEFAULT_NUMBER_OF_PRIMES;
+        }
+
+        return numPrimes;
+    }
+
+    /**
+     * Generate list of prime numbers.
+     *
+     * @param numPrimes total number of primes requested.
+     *
+     * @return list of prime numbers
+     */
+    public static List<Integer> getPrimeList(final int numPrimes)
+    {
+        // The primes 2 and 3 are added automatically by the generator
+        int primesToGenerate = numPrimes - 2;
+
+        PrimeGenerator gen = new PrimeGenerator();
+        for (int i = 0; i < primesToGenerate; i++) {
+            gen.next();
+        }
+
+        return gen.getPrimes();
+    }
+
+    /**
      * The main function for the command line prime number generator.
      */
     public static void main(String[] args)
     {
-        // Prime number generator instance.
-        PrimeGenerator gen = new PrimeGenerator();
+        int numPrimes = parseCLI(args);
 
-        // List of generated primes.
-        List<Integer> primes;
-
-        // Number of primes to generate.
-        int numPrimes = 0;
-
-        // Parse command line argument 1
-        try {
-            // Parse as an integer
-            numPrimes = Integer.parseInt(args[0]);
-        }
-        catch (NumberFormatException e) {
-            // If the argument could not be parsed, default to 10
-            numPrimes = 10;
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            // If no argument was supplied, default to 10
-            numPrimes = 10;
-        }
-
-        // The primes 2 and 3 are added automatically by the generator
-        numPrimes -= 2;
-
-        // Generate numPrimes prime numbers
-        //System.out.format("Generating %d Prime Numbers\n", numPrimes);
         System.out.format("Generating %d Prime Numbers%n", numPrimes);
-
-        for (int i = 0; i < numPrimes; i++) {
-            //System.out.format("%3d: %10d", i, gen.next());
-            //System.out.println();
-            gen.next();
-        }
-
-        // Print the resulting list of primes
         System.out.println();
-        //System.out.format("Prime Numbers Generated: \n", numPrimes); // oops
         System.out.println("Prime Numbers Generated:");
 
-        // Retrieve the list of generated primes
-        primes = gen.getPrimes();
+        List<Integer> primes = getPrimeList(numPrimes);
 
-        // Print each prime
         for (Integer i : primes) {
             System.out.println(i);
         }
