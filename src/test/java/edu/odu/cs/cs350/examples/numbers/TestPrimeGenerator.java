@@ -3,6 +3,7 @@ package edu.odu.cs.cs350.examples.numbers;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.BeforeEach;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -232,6 +233,7 @@ public class TestPrimeGenerator
         assertThat(primeIt.hasNext(), is(false));
     }
 
+    @Disabled
     @Test
     public void demoFail()
     {

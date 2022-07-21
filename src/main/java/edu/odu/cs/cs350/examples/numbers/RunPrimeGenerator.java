@@ -44,12 +44,10 @@ public class RunPrimeGenerator {
     public static List<Integer> getPrimeList(final int numPrimes)
     {
         // The primes 2 and 3 are added automatically by the generator
-        int primesToGenerate = numPrimes - 2;
+        int numberToCompute = numPrimes - 2;
 
         PrimeGenerator gen = new PrimeGenerator();
-        for (int i = 0; i < primesToGenerate; i++) {
-            gen.next();
-        }
+        gen.nextFew(numberToCompute);
 
         return gen.getPrimes();
     }

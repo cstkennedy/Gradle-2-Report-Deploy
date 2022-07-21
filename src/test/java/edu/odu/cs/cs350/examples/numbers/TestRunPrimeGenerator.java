@@ -4,6 +4,8 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,7 +31,7 @@ public class TestRunPrimeGenerator
     @Test
     public void testParseCLI_NoArgs()
     {
-        String[] someArgs = new String[1];
+        String[] someArgs = new String[0];
         int result = RunPrimeGenerator.parseCLI(someArgs);
 
         assertThat(result, equalTo(RunPrimeGenerator.DEFAULT_NUMBER_OF_PRIMES));
@@ -44,33 +46,27 @@ public class TestRunPrimeGenerator
         assertThat(result, equalTo(RunPrimeGenerator.DEFAULT_NUMBER_OF_PRIMES));
     }
 
-    @Test
-    public void testParseCLI_ValidArgs()
+    @ParameterizedTest(name = "{displayName} -> args: {arguments}")
+    @ValueSource(ints = {1, 2, 12, 25, 100, 1000, 1251})
+    public void testParseCLI_ValidArgs(int lengthArg)
     {
-        String[] someArgs = {"12"};
+        String[] someArgs = {Integer.toString(lengthArg)};
         int result = RunPrimeGenerator.parseCLI(someArgs);
 
-        assertThat(result, equalTo(12));
-
-        //----------------------------------------------------------------------
-        someArgs[0] = "25";
-        result = RunPrimeGenerator.parseCLI(someArgs);
-
-        assertThat(result, equalTo(25));
-
-        //----------------------------------------------------------------------
-        someArgs[0] = "1251";
-        result = RunPrimeGenerator.parseCLI(someArgs);
-
-        assertThat(result, equalTo(1251));
+        assertThat(result, equalTo(lengthArg));
     }
 
     @Test
     public void testGetPrimeList()
     {
-        int expectedCount = 12;
+        int expectedCount = 14;
         List<Integer> thePrimes = RunPrimeGenerator.getPrimeList(expectedCount);
 
         assertThat(thePrimes.size(), equalTo(expectedCount));
+
+        List<Integer> expectedPrimes = Arrays.asList(
+                2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43
+        );
+        assertThat(thePrimes, equalTo(expectedPrimes));
     }
 }
