@@ -11,6 +11,8 @@ plugins {
     id "project-report"
 
     id "org.jbake.site" version "5.5.0"
+
+    id "org.unbroken-dome.test-sets" version "4.0.0"
 }
 
 java {
@@ -47,7 +49,14 @@ run {
     args = [20]
 }
 
-test {
+//------------------------------------------------------------------------------
+// Test Configuration
+//------------------------------------------------------------------------------
+testSets {
+    integrationTest
+}
+
+tasks.withType(Test) {
     useJUnitPlatform()
 
     reports {
@@ -59,8 +68,30 @@ test {
     testLogging {
         events "passed", "skipped", "failed", "standardOut", "standardError"
     }
+}
 
+test {
     finalizedBy jacocoTestReport
+}
+
+integrationTest {
+    finalizedBy jacocoIntegrationTestReport
+}
+
+task jacocoMergedTestReport(type: JacocoReport,
+    dependsOn: ["test", "integrationTest", "jacocoTestReport", "jacocoIntegrationTestReport"])
+{
+    additionalSourceDirs.from = files(sourceSets.main.allSource.srcDirs)
+    sourceDirectories.from = files(sourceSets.main.allSource.srcDirs)
+    classDirectories.from = files(sourceSets.main.output)
+
+    executionData.from = fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+
+    reports {
+        html.enabled = true
+        xml.enabled = false
+        csv.enabled = true
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -89,6 +120,10 @@ pmdTest {
     enabled = false
 }
 
+pmdIntegrationTest {
+    enabled = false
+}
+
 spotbugsMain {
     ignoreFailures = true
     effort = "max"
@@ -101,6 +136,10 @@ spotbugsMain {
 }
 
 spotbugsTest {
+    enabled = false
+}
+
+spotbugsIntegrationTest {
     enabled = false
 }
 
@@ -120,6 +159,9 @@ checkstyleTest {
     enabled = false
 }
 
+checkstyleIntegrationTest {
+    enabled = false
+}
 
 //------------------------------------------------------------------------------
 // Deploy Steps (Convenience Tasks)
@@ -127,6 +169,8 @@ checkstyleTest {
 task reportsAndStuff(dependsOn: [
     "test",
     "jacocoTestReport",
+    "jacocoIntegrationTestReport",
+    "jacocoMergedTestReport",
     "checkstyleMain",
     "javadoc",
     "check",
