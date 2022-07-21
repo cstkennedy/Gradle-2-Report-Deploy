@@ -88,9 +88,9 @@ task jacocoMergedTestReport(type: JacocoReport,
     executionData.from = fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
 
     reports {
-        html.enabled = true
-        xml.enabled = false
-        csv.enabled = true
+        html.required = true
+        xml.required = false
+        csv.required = true
     }
 }
 
